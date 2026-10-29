@@ -23,6 +23,7 @@ CACHE_DIR.mkdir(exist_ok=True)
 
 MODEL_SIZE = os.environ.get("ENGLISH_REPLAY_MODEL", "base.en")
 MAX_UPLOAD_BYTES = 500 * 1024 * 1024
+APP_VERSION = "pyav19-fix-1"
 
 app = FastAPI(title="English Replay Windows Preview")
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
@@ -209,7 +210,12 @@ async def index() -> FileResponse:
 
 @app.get("/api/health")
 async def health() -> dict[str, Any]:
-    return {"ok": True, "model": MODEL_SIZE, "modelLoaded": _model is not None}
+    return {
+        "ok": True,
+        "version": APP_VERSION,
+        "model": MODEL_SIZE,
+        "modelLoaded": _model is not None,
+    }
 
 
 @app.post("/api/jobs")

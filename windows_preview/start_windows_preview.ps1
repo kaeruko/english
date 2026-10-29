@@ -25,7 +25,17 @@ if (-not $dependenciesReady) {
     & $venvPython -m pip install -r (Join-Path $previewRoot 'requirements.txt')
 }
 
-$port = 8765
+$portProbe = [System.Net.Sockets.TcpListener]::new(
+    [System.Net.IPAddress]::Loopback,
+    0
+)
+try {
+    $portProbe.Start()
+    $port = ([System.Net.IPEndPoint]$portProbe.LocalEndpoint).Port
+} finally {
+    $portProbe.Stop()
+}
+
 $serverArguments = @(
     '-m', 'uvicorn', 'app:app',
     '--host', '127.0.0.1',
@@ -50,7 +60,7 @@ try {
         }
         try {
             $health = Invoke-RestMethod -Uri "$url/api/health" -TimeoutSec 1
-            if ($health.ok) {
+            if ($health.ok -and $health.version -eq 'pyav19-fix-1') {
                 $started = $true
                 break
             }

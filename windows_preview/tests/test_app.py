@@ -6,10 +6,13 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from app import _patch_pyav_compatibility, _segment_payload, sanitize_filename  # noqa: E402
+from app import APP_VERSION, _patch_pyav_compatibility, _segment_payload, sanitize_filename  # noqa: E402
 
 
 class FilenameTests(unittest.TestCase):
+    def test_app_version_marks_pyav_fix(self):
+        self.assertEqual(APP_VERSION, "pyav19-fix-1")
+
     def test_removes_path_and_unsafe_characters(self):
         self.assertEqual(sanitize_filename("..%2Flesson%3F01.mp3"), "lesson_01.mp3")
 
