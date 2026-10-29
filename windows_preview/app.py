@@ -54,6 +54,25 @@ def sanitize_filename(value: str) -> str:
     return cleaned[:120] or "audio.mp3"
 
 
+def _patch_pyav_compatibility(av_module: Any) -> None:
+    """Make faster-whisper 1.2.x compatible with PyAV 19 and newer."""
+    try:
+        major_version = int(str(av_module.__version__).split(".", 1)[0])
+    except (AttributeError, TypeError, ValueError):
+        return
+
+    current_open = av_module.open
+    if major_version < 19 or getattr(current_open, "_english_replay_compat", False):
+        return
+
+    def compatible_open(*args: Any, **kwargs: Any) -> Any:
+        kwargs.pop("metadata_errors", None)
+        return current_open(*args, **kwargs)
+
+    compatible_open._english_replay_compat = True  # type: ignore[attr-defined]
+    av_module.open = compatible_open
+
+
 def _load_model(job_id: str) -> Any:
     global _model
     with _model_lock:
@@ -66,12 +85,15 @@ def _load_model(job_id: str) -> Any:
             message=f"英語モデル（{MODEL_SIZE}）を準備しています。初回はダウンロードします…",
         )
         try:
+            import av
             from faster_whisper import WhisperModel
         except ImportError as error:
             raise RuntimeError(
                 "faster-whisperがインストールされていません。"
                 "start_windows_preview.cmdから起動してください。"
             ) from error
+
+        _patch_pyav_compatibility(av)
 
         cpu_threads = max(1, min(8, (os.cpu_count() or 4) - 1))
         _model = WhisperModel(

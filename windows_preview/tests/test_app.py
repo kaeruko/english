@@ -6,7 +6,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from app import _segment_payload, sanitize_filename  # noqa: E402
+from app import _patch_pyav_compatibility, _segment_payload, sanitize_filename  # noqa: E402
 
 
 class FilenameTests(unittest.TestCase):
@@ -38,6 +38,31 @@ class SegmentTests(unittest.TestCase):
         payload = _segment_payload(segment)
         self.assertEqual(len(payload["words"]), 1)
         self.assertEqual(payload["words"][0]["text"], "Test")
+
+
+class PyAVCompatibilityTests(unittest.TestCase):
+    def test_removes_metadata_errors_for_pyav_19(self):
+        received = {}
+
+        def fake_open(*args, **kwargs):
+            received.update(kwargs)
+            return args[0]
+
+        av_module = SimpleNamespace(__version__="19.0.2", open=fake_open)
+        _patch_pyav_compatibility(av_module)
+
+        result = av_module.open("lesson.mp3", mode="r", metadata_errors="ignore")
+
+        self.assertEqual(result, "lesson.mp3")
+        self.assertEqual(received, {"mode": "r"})
+
+    def test_leaves_older_pyav_unchanged(self):
+        def fake_open(*args, **kwargs):
+            return None
+
+        av_module = SimpleNamespace(__version__="18.1.0", open=fake_open)
+        _patch_pyav_compatibility(av_module)
+        self.assertIs(av_module.open, fake_open)
 
 
 if __name__ == "__main__":

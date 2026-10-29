@@ -13,7 +13,7 @@ if (-not (Test-Path -LiteralPath $venvPython)) {
 
 $dependenciesReady = $false
 try {
-    & $venvPython -c 'import fastapi, uvicorn, faster_whisper' 2>$null
+    & $venvPython -c 'import av, fastapi, uvicorn, faster_whisper' 2>$null
     $dependenciesReady = ($LASTEXITCODE -eq 0)
 } catch {
     $dependenciesReady = $false
