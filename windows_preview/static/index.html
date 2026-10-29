@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>English Replay — Windows Preview</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="top-bar">
+        <div>
+          <p class="eyebrow">WINDOWS PREVIEW</p>
+          <h1>English Replay</h1>
+        </div>
+        <label class="lead-in-setting">
+          <span>タップ時の助走</span>
+          <select id="leadInSelect">
+            <option value="0">0.0秒</option>
+            <option value="0.2">0.2秒</option>
+            <option value="0.4" selected>0.4秒</option>
+            <option value="0.8">0.8秒</option>
+          </select>
+        </label>
+      </header>
+
+      <section id="welcomePanel" class="welcome-panel">
+        <div id="dropZone" class="drop-zone" tabindex="0" role="button">
+          <div class="drop-icon">♫</div>
+          <h2>英語音声を選ぶ</h2>
+          <p>MP3、M4A、WAVなどをここへドロップ</p>
+          <button id="chooseButton" class="primary-button" type="button">ファイルを選択</button>
+          <input id="fileInput" type="file" accept="audio/*,.mp3,.m4a,.wav,.ogg,.flac" hidden />
+        </div>
+
+        <div id="statusCard" class="status-card hidden" aria-live="polite">
+          <div class="status-row">
+            <span id="statusText">準備しています…</span>
+            <span id="statusPercent">0%</span>
+          </div>
+          <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+          <p id="statusHint">初回は英語モデルのダウンロードに時間がかかります。</p>
+        </div>
+      </section>
+
+      <section id="transcriptPanel" class="transcript-panel hidden">
+        <div class="transcript-heading">
+          <div>
+            <p class="eyebrow">TRANSCRIPT</p>
+            <h2 id="audioTitle">Audio</h2>
+          </div>
+          <button id="followButton" class="secondary-button active" type="button">● 自動追従</button>
+        </div>
+        <div id="transcriptList" class="transcript-list"></div>
+      </section>
+    </main>
+
+    <section id="playerDock" class="player-dock hidden" aria-label="音声プレイヤー">
+      <audio id="audioElement" preload="metadata"></audio>
+      <div class="timeline-row">
+        <span id="currentTime" class="time-label">00:00</span>
+        <input id="timeline" type="range" min="0" max="1" value="0" step="0.01" />
+        <span id="duration" class="time-label">00:00</span>
+      </div>
+      <div class="controls-row">
+        <button id="previousButton" class="control-button" type="button"><b>⇤</b><span>前の文</span></button>
+        <button id="replayButton" class="control-button replay" type="button"><b>↶</b><span>もう一度</span></button>
+        <button id="playButton" class="play-button" type="button" aria-label="再生">▶</button>
+        <button id="nextButton" class="control-button" type="button"><b>⇥</b><span>次の文</span></button>
+        <label class="speed-control">
+          <span>速度</span>
+          <select id="speedSelect">
+            <option value="0.7">0.7×</option>
+            <option value="0.8">0.8×</option>
+            <option value="1" selected>1.0×</option>
+            <option value="1.2">1.2×</option>
+            <option value="1.5">1.5×</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <div id="toast" class="toast hidden" role="alert"></div>
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>

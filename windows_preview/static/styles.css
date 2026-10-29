@@ -1,0 +1,231 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --background: #090c0c;
+  --surface: #121717;
+  --surface-raised: #182020;
+  --text: #f2f7f5;
+  --muted: #98a8a4;
+  --mint: #66f2bd;
+  --mint-dark: #073e2e;
+  --border: #293533;
+  --danger: #ff837a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 20% -10%, rgba(102, 242, 189, 0.13), transparent 34rem),
+    var(--background);
+  color: var(--text);
+}
+
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+
+.hidden { display: none !important; }
+
+.app-shell {
+  width: min(920px, 100%);
+  margin: 0 auto;
+  padding: 30px 24px 220px;
+}
+
+.top-bar, .transcript-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+h1, h2, p { margin: 0; }
+h1 { font-size: clamp(1.6rem, 4vw, 2.3rem); letter-spacing: -0.04em; }
+h2 { letter-spacing: -0.025em; }
+
+.eyebrow {
+  margin-bottom: 4px;
+  color: var(--mint);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.lead-in-setting, .speed-control {
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+select {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+.welcome-panel { padding-top: 72px; }
+
+.drop-zone {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 56px 28px;
+  border: 1px dashed #416158;
+  border-radius: 24px;
+  background: rgba(18, 23, 23, 0.84);
+  text-align: center;
+  transition: border-color 160ms ease, transform 160ms ease, background 160ms ease;
+}
+
+.drop-zone.dragging {
+  transform: translateY(-2px);
+  border-color: var(--mint);
+  background: rgba(102, 242, 189, 0.08);
+}
+
+.drop-zone p, #statusHint { color: var(--muted); }
+.drop-icon { color: var(--mint); font-size: 3rem; }
+
+.primary-button, .secondary-button {
+  border: 0;
+  border-radius: 12px;
+  font-weight: 800;
+}
+
+.primary-button {
+  margin-top: 8px;
+  padding: 12px 20px;
+  background: var(--mint);
+  color: #06120e;
+}
+
+.secondary-button {
+  padding: 9px 12px;
+  background: var(--surface-raised);
+  color: var(--muted);
+}
+
+.secondary-button.active { color: var(--mint); }
+
+.status-card {
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.status-row { display: flex; justify-content: space-between; gap: 16px; font-weight: 700; }
+.progress-track { height: 7px; margin: 12px 0; overflow: hidden; border-radius: 99px; background: #26312f; }
+.progress-bar { width: 0; height: 100%; border-radius: inherit; background: var(--mint); transition: width 220ms ease; }
+#statusHint { font-size: 0.8rem; }
+
+.transcript-panel { padding-top: 42px; }
+.transcript-heading { position: sticky; top: 0; z-index: 5; padding: 14px 0 18px; background: linear-gradient(var(--background) 72%, transparent); }
+.transcript-list { display: grid; gap: 12px; }
+
+.segment-card {
+  padding: 16px;
+  border: 1px solid transparent;
+  border-radius: 17px;
+  background: var(--surface);
+  scroll-margin-block: 160px;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+
+.segment-card.active { border-color: rgba(102, 242, 189, 0.5); background: rgba(102, 242, 189, 0.08); }
+.segment-time { margin-bottom: 9px; border: 0; background: none; color: var(--muted); font-family: ui-monospace, monospace; font-size: 0.75rem; font-weight: 800; }
+.segment-card.active .segment-time { color: var(--mint); }
+.word-list { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.word-button {
+  padding: 4px 5px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.word-button:hover { background: rgba(102, 242, 189, 0.12); }
+.word-button.active { background: var(--mint); color: #06120e; font-weight: 850; }
+
+.player-dock {
+  position: fixed;
+  z-index: 20;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 14px max(18px, calc((100vw - 880px) / 2)) 18px;
+  border-top: 1px solid var(--border);
+  background: rgba(13, 17, 17, 0.92);
+  box-shadow: 0 -18px 60px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(22px);
+}
+
+.timeline-row { display: grid; grid-template-columns: 52px 1fr 52px; align-items: center; gap: 10px; }
+.time-label { color: var(--muted); font-family: ui-monospace, monospace; font-size: 0.74rem; }
+.time-label:last-child { text-align: right; }
+
+input[type="range"] { width: 100%; accent-color: var(--mint); }
+.controls-row { display: flex; align-items: center; justify-content: center; gap: clamp(12px, 4vw, 34px); margin-top: 10px; }
+
+.control-button {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  min-width: 62px;
+  padding: 6px;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font-size: 0.72rem;
+}
+
+.control-button b { font-size: 1.55rem; }
+.control-button.replay { color: var(--mint); }
+
+.play-button {
+  width: 62px;
+  height: 62px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--mint);
+  color: #06120e;
+  font-size: 1.6rem;
+  font-weight: 900;
+}
+
+.toast {
+  position: fixed;
+  z-index: 50;
+  top: 20px;
+  left: 50%;
+  max-width: min(540px, calc(100% - 32px));
+  transform: translateX(-50%);
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 131, 122, 0.5);
+  border-radius: 12px;
+  background: #361b1a;
+  color: #ffd5d1;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 620px) {
+  .app-shell { padding: 20px 14px 210px; }
+  .top-bar { align-items: flex-start; }
+  .welcome-panel { padding-top: 44px; }
+  .drop-zone { padding: 42px 18px; }
+  .controls-row { gap: 5px; justify-content: space-between; }
+  .control-button { min-width: 52px; }
+  .control-button span { font-size: 0.64rem; }
+  .speed-control span { display: none; }
+  .play-button { width: 56px; height: 56px; }
+}

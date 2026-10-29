@@ -2,3 +2,9 @@ xcuserdata/
 DerivedData/
 *.xcuserstate
 .DS_Store
+
+# Windows preview
+windows_preview/.venv/
+windows_preview/.cache/
+windows_preview/__pycache__/
+windows_preview/**/__pycache__/

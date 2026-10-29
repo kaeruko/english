@@ -40,3 +40,18 @@ SpeechAnalyzerはシミュレーターや一部の端末で利用できない場
 - 失敗時: `xcodebuild.log`を7日間Artifactとして保存
 
 実機配布とTestFlightには、Apple Developerの証明書、Provisioning Profile、App Store Connect上のアプリ登録が別途必要です。これらの秘密情報はGitへコミットしません。
+
+## Windowsで操作を試す
+
+`windows_preview/start_windows_preview.cmd`をダブルクリックすると、ローカルWeb版を起動できます。初回はPythonライブラリと`base.en`英語モデルをダウンロードします。
+
+ローカルWeb版では以下を試せます。
+
+- MP3などの英語音声を端末内で文字起こし
+- 単語をクリックして0.4秒前から再生
+- 再生中の字幕・単語をハイライト
+- 前の文、もう一度、次の文
+- 再生速度と助走時間の変更
+- 再生位置への自動追従
+
+音声は`127.0.0.1`上のローカルサーバーだけへ送られ、外部APIには送信されません。文字起こし結果は`windows_preview/.cache`へ保存され、同じ音声の二回目以降は再利用されます。
