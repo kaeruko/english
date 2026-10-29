@@ -30,3 +30,13 @@ SpeechAnalyzerはシミュレーターや一部の端末で利用できない場
 - 字幕を手動スクロール: 自動追従を停止。`再生位置`で追従を再開
 
 音声、字幕、再生位置は端末のApplication Support内だけに保存します。外部APIは使用しません。
+
+## Windowsからの開発
+
+`main`へのpushとPull Requestで、GitHub ActionsのmacOS 26環境がXcode 26を使って自動ビルドします。署名は行わず、まずコンパイルできることを確認するワークフローです。
+
+- Actions: `.github/workflows/ios-build.yml`
+- 成功時: iOS Simulator用の`.app`を7日間Artifactとして保存
+- 失敗時: `xcodebuild.log`を7日間Artifactとして保存
+
+実機配布とTestFlightには、Apple Developerの証明書、Provisioning Profile、App Store Connect上のアプリ登録が別途必要です。これらの秘密情報はGitへコミットしません。
