@@ -7,7 +7,7 @@ $venvPython = Join-Path $venvRoot 'Scripts\python.exe'
 Set-Location -LiteralPath $previewRoot
 
 if (-not (Test-Path -LiteralPath $venvPython)) {
-    Write-Host '初回セットアップ: Python仮想環境を作成しています…' -ForegroundColor Cyan
+    Write-Host 'First-time setup: creating a Python virtual environment...' -ForegroundColor Cyan
     python -m venv $venvRoot
 }
 
@@ -20,7 +20,7 @@ try {
 }
 
 if (-not $dependenciesReady) {
-    Write-Host '初回セットアップ: 必要なライブラリをインストールしています…' -ForegroundColor Cyan
+    Write-Host 'First-time setup: installing required packages...' -ForegroundColor Cyan
     & $venvPython -m pip install --upgrade pip
     & $venvPython -m pip install -r (Join-Path $previewRoot 'requirements.txt')
 }
@@ -46,7 +46,7 @@ try {
     $started = $false
     for ($attempt = 0; $attempt -lt 60; $attempt++) {
         if ($server.HasExited) {
-            throw 'ローカルサーバーを起動できませんでした。'
+            throw 'The local server failed to start.'
         }
         try {
             $health = Invoke-RestMethod -Uri "$url/api/health" -TimeoutSec 1
@@ -60,14 +60,14 @@ try {
     }
 
     if (-not $started) {
-        throw 'ローカルサーバーの起動がタイムアウトしました。'
+        throw 'Timed out while starting the local server.'
     }
 
     Start-Process $url
     Write-Host ''
-    Write-Host "English Replayを開きました: $url" -ForegroundColor Green
-    Write-Host '終了するまでこのウィンドウは開いたままにしてください。' -ForegroundColor Yellow
-    [void](Read-Host 'アプリを終了するにはEnterキーを押してください')
+    Write-Host "English Replay is open: $url" -ForegroundColor Green
+    Write-Host 'Keep this window open while using the app.' -ForegroundColor Yellow
+    [void](Read-Host 'Press Enter to stop the app')
 } finally {
     if (-not $server.HasExited) {
         Stop-Process -Id $server.Id
